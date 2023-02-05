@@ -19,17 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.verify;
-
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
 @DisplayName("Сервис библиотеки должен")
 class LibraryServiceImplTest {
-
-    @Configuration
-    @Import(LibraryServiceImpl.class)
-    static class NestedConfiguration {
-    }
 
     @MockBean
     private AuthorDao authorDao;
@@ -82,8 +77,9 @@ class LibraryServiceImplTest {
         commentList.add(comment);
         Book book = new Book(1L, null, null, null,commentList);
 
+        when(bookDao.findBookById(1L)).thenReturn(book);
         libraryService.getAllCommentsByBook(book);
-        verify(bookDao).findBookById(1L).getComments();
+        verify(bookDao).findBookById(1L);
     }
 
 }

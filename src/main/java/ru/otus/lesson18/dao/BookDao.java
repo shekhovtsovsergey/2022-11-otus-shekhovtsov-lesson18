@@ -8,7 +8,6 @@ import java.util.List;
 public interface BookDao extends JpaRepository<Book, Long> {
 
     List<Book> findAll();
-
     Book findBookById(Long id);
 
 

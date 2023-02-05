@@ -20,8 +20,6 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public List<Book> getAllBooks() {
-        List<Book> tmp = bookDao.findAll();
-        System.out.println(tmp);
         return bookDao.findAll();
     }
 

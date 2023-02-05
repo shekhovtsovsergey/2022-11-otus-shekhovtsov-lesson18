@@ -6,11 +6,11 @@ import org.hibernate.annotations.BatchSize;
 import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "books")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "books")
 @NamedEntityGraph(name = "Book.allAttributes", includeAllAttributes = true)
 public class Book {
     @Id
@@ -29,7 +29,7 @@ public class Book {
     private Genre genre;
 
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany()
     @BatchSize(size = 20)
     @JoinColumn(name = "book_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "fk_book_comment"),
