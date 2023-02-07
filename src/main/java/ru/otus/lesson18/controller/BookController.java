@@ -1,11 +1,14 @@
 package ru.otus.lesson18.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.lesson18.converter.AuthorConverter;
 import ru.otus.lesson18.converter.BookConverter;
 import ru.otus.lesson18.converter.CommentConverter;
+import ru.otus.lesson18.converter.GenreConverter;
 import ru.otus.lesson18.model.Book;
 import ru.otus.lesson18.service.LibraryService;
 import java.util.stream.Collectors;
@@ -18,6 +21,8 @@ public class BookController {
     private final LibraryService libraryService;
     private final BookConverter bookConverter;
     private final CommentConverter commentConverter;
+    private final AuthorConverter authorConverter;
+    private final GenreConverter genreConverter;
 
     @GetMapping("/all")
     public String getBookList(Model model) {
@@ -33,6 +38,9 @@ public class BookController {
         } else {
             book = new Book();
         }
+
+        model.addAttribute("authors", libraryService.getAllAuthore().stream().map(authorConverter::entityToDto).collect(Collectors.toList()));
+        model.addAttribute("genres", libraryService.getAllGenre().stream().map(genreConverter::entityToDto).collect(Collectors.toList()));
         model.addAttribute("book", book);
         return "book-form";
     }
@@ -62,8 +70,12 @@ public class BookController {
     }
 
     @PostMapping
-    public String saveBook(Book book) {
-        libraryService.saveBook(book);
+    public String saveBook(Book book,String id, String name, Long authorId, Long genreId) throws ChangeSetPersister.NotFoundException {
+        Book bookNew = new Book(null,null,null,null,null);
+        bookNew.setName(name);
+        bookNew.setAuthor(libraryService.getAuthorById(authorId).orElseThrow(ChangeSetPersister.NotFoundException::new));
+        bookNew.setGenre(libraryService.getGenreById(genreId).orElseThrow(ChangeSetPersister.NotFoundException::new));
+        libraryService.saveBook(bookNew);
         return "redirect:/book/all";
     }
 

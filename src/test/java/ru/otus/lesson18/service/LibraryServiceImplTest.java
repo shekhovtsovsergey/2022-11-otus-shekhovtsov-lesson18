@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import ru.otus.lesson18.dao.AuthorDao;
 import ru.otus.lesson18.dao.BookDao;
 import ru.otus.lesson18.dao.CommentDao;
